@@ -1,0 +1,118 @@
+{%extends 'store/base.html'%}
+
+{% load embed_video_tags %}
+
+{%block main_block%}
+
+<h3>My Orders</h3>
+
+{{orders}}
+
+
+
+<div class="mx-auto my-4 max-w-6xl px-2 md:my-6 md:px-0">
+    <h2 class="text-3xl font-bold">Order Details</h2>
+    <div class="mt-3 text-sm">
+      Check the status of recent and old orders &amp; discover more products
+    </div>
+
+    {%for o in orders%}
+
+    <div class="mt-8 flex flex-col overflow-hidden rounded-lg border border-gray-300 md:flex-row">
+        <div class="w-full border-r border-gray-300 bg-gray-100 md:max-w-xs">
+          <div class="p-8">
+            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-1">
+              <div class="mb-4">
+                <div class="text-sm font-semibold">Order ID</div>
+                <div class="text-sm font-medium text-gray-700">{{o.order_id}}</div>
+              </div>
+              <div class="mb-4">
+                <div class="text-sm font-semibold">Date</div>
+                <div class="text-sm font-medium text-gray-700">{{o.created_date}}</div>
+              </div>
+              <div class="mb-4">
+                <div class="text-sm font-semibold">Total Amount</div>
+                <div class="text-sm font-medium text-gray-700">₹{{o.total}}</div>
+              </div>
+              <div class="mb-4">
+                <div class="text-sm font-semibold">Order Status</div>
+                <div class="text-sm font-medium text-gray-700">
+                  {% if o.is_paid %}
+                     Payment Completed
+                  {%else%}
+                    Payment Pending
+                  {%endif%}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex-1">
+          <div class="p-8">
+            <ul class="-my-7 divide-y divide-gray-200">
+              
+              {%for p in o.project_objects.all%}
+
+              <li class="flex flex-col justify-between space-x-5 py-7 md:flex-row"></li>
+                <div class="flex flex-1 items-stretch">
+                  <div class="flex-shrink-0">
+                    <img
+                      class="h-20 w-20 rounded-lg border border-gray-200 object-contain"
+                      src="https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/e48d6035-bd8a-4747-9fa1-04ea596bb074/blazer-low-77-se-shoes-0w2HHV.png"
+                      alt="https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/e48d6035-bd8a-4747-9fa1-04ea596bb074/blazer-low-77-se-shoes-0w2HHV.png"
+                    />
+                  </div>
+                  <div class="ml-5 flex flex-col justify-between">
+                    <div class="flex-1">
+                      <p class="text-sm font-bold text-gray-900">
+                        {{p.title}}
+                      </p>
+                      <p class="mt-1.5 text-sm font-medium text-gray-500">{{p.owner}}</p>
+                    </div>
+                    <p class="mt-4 text-sm font-medium text-gray-500">
+                      {%if o.is_paid%}
+
+                      <a href="{{p.files.url}}" download>Download</a>
+
+                      {%endif%}
+                    </p>
+                    <p><a href="{%url 'review-add' p.id%}">Add Review</a></p>
+                  </div>
+                </div>
+                <div class="ml-auto flex flex-col items-end justify-between">
+                  <p class="text-right text-sm font-bold text-gray-900">₹{{p.price}}</p>
+                </div>
+              </li>
+
+
+              {%endfor%}
+
+            </ul>
+            <hr class="my-8 border-t border-t-gray-200" />
+            <div class="space-x-4">
+              <button
+                type="button"
+                class="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+              >
+                View Order
+              </button>
+              <button
+                type="button"
+                class="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+              >
+                View Invoice
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    {%endfor%}
+
+
+  </div>
+  
+
+
+{%endblock%}
+
